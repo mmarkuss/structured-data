@@ -74,9 +74,7 @@
        (- y2 y1)))
 
 (defn square? [rectangle]
-  (if (= (width rectangle) (height rectangle) )
-    true
-    false))
+  (= (width rectangle) (height rectangle) ))
 
 (defn area [rectangle]
   (* (width rectangle) (height rectangle)))
@@ -90,11 +88,9 @@
 
 (defn contains-rectangle? [outer inner]
   (let [[left-bottom right-top] inner]
-    (if (and
-         (contains-point? outer left-bottom)
-         (contains-point? outer right-top))
-      true
-      false)))
+    (and
+     (contains-point? outer left-bottom)
+     (contains-point? outer right-top))))
 
 (defn title-length [book]
   (count (get book :title)))
@@ -104,23 +100,18 @@
   (count (get book :authors)))
 
 (defn multiple-authors? [book]
-  (if (> (count (get book :authors)) 1)
-    true
-    false
-))
+  (> (author-count book) 1))
 
 (defn add-author [book new-author]
   ;; (let [authors (get book :authors)]
     ;; (let [combined-authors (conj authors new-author)]
     ;; (assoc book :authors combined-authors))   
     ;; )
-  (assoc book :authors (conj (get book :authors) new-author))
+  (assoc book :authors (conj (:authors book) new-author))
   )
 
 (defn alive? [author]
-  (if (contains? author :death-year)
-    false
-    true))
+  (not (contains? author :death-year)))
 
 (defn element-lengths [collection]
   (map count collection))
@@ -141,17 +132,15 @@
   (apply str (repeat n "*")))
 
 (defn toggle [a-set elem]
-  (if (contains? a-set elem)
+  (if (a-set elem)
     (disj a-set elem)
     (conj a-set elem)))
 
 (defn contains-duplicates? [a-seq]
-  (if (> (count a-seq) (count (set a-seq)))
-    true
-    false))
+  (> (count a-seq) (count (set a-seq))))
 
 (defn old-book->new-book [book]
-  (assoc book :authors (set (get book :authors))))
+  (assoc book :authors (set (:authors book))))
 
 (defn has-author? [book author]
   (contains? (:authors book) author))
@@ -198,9 +187,9 @@
   (filter alive? authors)  )
 
 (defn has-a-living-author? [book]
-  (if (empty? (living-authors (:authors book)))
-    false
-    true)
+  (empty? (living-authors (:authors book)))
+  false
+  true
   )
 
 (defn books-by-living-authors [books]
